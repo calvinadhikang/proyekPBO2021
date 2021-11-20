@@ -17,6 +17,7 @@ public class TestProject {
     public static void main(String[] args) {
         // TODO code application logic here
         System.out.println("hello ini project pbo");
+        System.out.println("ini revisi 1");
     }
     
 }
