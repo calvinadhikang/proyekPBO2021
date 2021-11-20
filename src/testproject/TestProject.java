@@ -16,8 +16,10 @@ public class TestProject {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println("hello ini project pbo");
-        System.out.println("ini revisi 1");
+        DB.initConn();
+        Login l = new Login();
+        l.setLocationRelativeTo(null);
+        l.setVisible(true);
     }
     
 }
