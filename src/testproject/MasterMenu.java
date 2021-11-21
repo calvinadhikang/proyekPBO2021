@@ -5,10 +5,16 @@
  */
 package testproject;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -19,14 +25,67 @@ public class MasterMenu extends javax.swing.JFrame {
     /**
      * Creates new form MasterMenu
      */
+    
+    String nama, kategori;
+    int harga, status, id;
+    String mode = "";
+    
     public MasterMenu() {
         initComponents();
         jPanel1.setFocusable(true);
         Login.FrameDragListener frameDragListener = new Login.FrameDragListener(this);
         this.addMouseListener(frameDragListener);
         this.addMouseMotionListener(frameDragListener);
+        settingTabel();
+        settingWarnaComboBox();
+        mode = "insert";
     }
 
+    public void settingTabel(){
+        tabelMenu.getTableHeader().setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 14));
+        tabelMenu.getTableHeader().setOpaque(false);
+        tabelMenu.getTableHeader().setBackground(new Color(255, 255, 255));
+        tabelMenu.getTableHeader().setForeground(new Color(0, 0, 0));
+        tabelMenu.setRowHeight(25);
+        tabelMenu.setModel(DB.getTabelMenu());
+        tabelMenu.setDefaultEditor(Object.class, null);
+    }
+    
+    public void getData(){
+        nama = txtNama.getText();
+        kategori = cmbKategori.getSelectedItem().toString();
+        harga = Integer.parseInt(nudHarga.getValue().toString());
+        if (!(txtID.getText().equals(""))) {
+            id = Integer.parseInt(txtID.getText());
+        }
+        if (radAvailable.isSelected()) {
+            status = 1;
+        }
+        else{
+            status = 0;
+        }
+    }
+    
+    public void resetAll(){
+        txtNama.setText("");
+        txtID.setText("");
+        nudHarga.setValue(0);
+        radAvailable.setSelected(true);
+        cmbKategori.setSelectedIndex(0);
+        mode = "insert";
+    }
+    
+    public void refreshTabel(){
+        tabelMenu.setModel(DB.getTabelMenu());
+    }
+    
+    public void settingWarnaComboBox(){
+        Object child = cmbKategori.getAccessibleContext().getAccessibleChild(0);
+        BasicComboPopup popup = (BasicComboPopup)child;
+        JList list = popup.getList();
+        list.setSelectionBackground(new Color(0,239,173));
+    }
+    
     public static class FrameDragListener extends MouseAdapter {
 
         private final JFrame frame;
@@ -59,45 +118,254 @@ public class MasterMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         lblExit = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelMenu = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        txtID = new javax.swing.JTextField();
+        txtNama = new javax.swing.JTextField();
+        cmbKategori = new javax.swing.JComboBox<>();
+        nudHarga = new javax.swing.JSpinner();
+        radAvailable = new javax.swing.JRadioButton();
+        radNotAvailable = new javax.swing.JRadioButton();
+        btnClear = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnInsert = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(26, 50, 90));
 
-        lblExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/close.png"))); // NOI18N
+        lblExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/close v2.png"))); // NOI18N
         lblExit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblExitMouseClicked(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Master Menu");
+
+        tabelMenu.setBackground(new java.awt.Color(204, 204, 204));
+        tabelMenu.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 14)); // NOI18N
+        tabelMenu.setForeground(new java.awt.Color(0, 0, 0));
+        tabelMenu.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tabelMenu.setRowHeight(25);
+        tabelMenu.setSelectionBackground(new java.awt.Color(0, 239, 173));
+        tabelMenu.setSelectionForeground(new java.awt.Color(0, 0, 0));
+        tabelMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelMenuMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabelMenu);
+
+        jLabel3.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Harga : ");
+
+        jLabel4.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("ID Menu :");
+
+        jLabel5.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Nama Menu :");
+
+        jLabel6.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Status : ");
+
+        jLabel7.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Kategori :");
+
+        txtID.setEditable(false);
+        txtID.setBackground(new java.awt.Color(26, 50, 90));
+        txtID.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+        txtID.setForeground(new java.awt.Color(255, 255, 255));
+        txtID.setMargin(new java.awt.Insets(0, 5, 0, 5));
+
+        txtNama.setBackground(new java.awt.Color(26, 50, 90));
+        txtNama.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+        txtNama.setForeground(new java.awt.Color(255, 255, 255));
+        txtNama.setMargin(new java.awt.Insets(0, 5, 0, 5));
+
+        cmbKategori.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+        cmbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Makanan", "Minuman", "Snack" }));
+
+        nudHarga.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+
+        radAvailable.setBackground(new java.awt.Color(26, 50, 90));
+        buttonGroup1.add(radAvailable);
+        radAvailable.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+        radAvailable.setForeground(new java.awt.Color(255, 255, 255));
+        radAvailable.setText("Available");
+
+        radNotAvailable.setBackground(new java.awt.Color(26, 50, 90));
+        buttonGroup1.add(radNotAvailable);
+        radNotAvailable.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 18)); // NOI18N
+        radNotAvailable.setForeground(new java.awt.Color(255, 255, 255));
+        radNotAvailable.setText("Not Available");
+
+        btnClear.setBackground(new java.awt.Color(255, 255, 153));
+        btnClear.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(0, 0, 0));
+        btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/clear.png"))); // NOI18N
+        btnClear.setText("  Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(255, 102, 102));
+        btnDelete.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(0, 0, 0));
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/delete.png"))); // NOI18N
+        btnDelete.setText(" Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(0, 239, 173));
+        btnUpdate.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(0, 0, 0));
+        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/update.png"))); // NOI18N
+        btnUpdate.setText("  Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnInsert.setBackground(new java.awt.Color(0, 239, 173));
+        btnInsert.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        btnInsert.setForeground(new java.awt.Color(0, 0, 0));
+        btnInsert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/insert.png"))); // NOI18N
+        btnInsert.setText("  Insert");
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/logo mini.png"))); // NOI18N
+        jLabel2.setText("  Resto Ga Kenyang Ga Pulang");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 340, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(85, 85, 85)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(radAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(radNotAvailable))
+                            .addComponent(nudHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(135, 135, 135))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(69, 69, 69)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)
+                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblExit)
-                .addGap(18, 18, 18))
+                .addGap(17, 17, 17))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(368, 368, 368)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(lblExit))
-                .addContainerGap(350, Short.MAX_VALUE))
+                    .addComponent(lblExit)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nudHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(radAvailable)
+                    .addComponent(radNotAvailable)
+                    .addComponent(jLabel5)
+                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -108,7 +376,7 @@ public class MasterMenu extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -120,6 +388,90 @@ public class MasterMenu extends javax.swing.JFrame {
         f.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_lblExitMouseClicked
+
+    private void tabelMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelMenuMouseClicked
+        int idx = tabelMenu.getSelectedRow();
+        mode = "edit";
+        if (idx >= 0 && idx < tabelMenu.getRowCount()){
+            txtID.setText(DB.getTabelMenu().getValueAt(idx, 0).toString());
+            txtNama.setText(DB.getTabelMenu().getValueAt(idx, 1).toString());
+            nudHarga.setValue(Integer.parseInt(DB.getTabelMenu().getValueAt(idx, 2).toString()));
+            String status = DB.getTabelMenu().getValueAt(idx, 4).toString();
+            if (status.equals("Available")) {
+                radAvailable.setSelected(true);
+                radNotAvailable.setSelected(false);
+            }
+            else{
+                radAvailable.setSelected(false);
+                radNotAvailable.setSelected(true);
+            }
+            String kategori = DB.getTabelMenu().getValueAt(idx, 3).toString();
+            if (kategori.equals("Makanan")) {
+                cmbKategori.setSelectedIndex(0);
+            }
+            else if (kategori.equals("Minuman")) {
+                cmbKategori.setSelectedIndex(1);
+            }
+            else{
+                cmbKategori.setSelectedIndex(2);
+            }
+        }
+    }//GEN-LAST:event_tabelMenuMouseClicked
+
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        if (mode.equals("insert")) {
+            getData();
+            try {
+                Menu.insertTableMenu(nama, kategori, harga, status);
+                JOptionPane.showMessageDialog(this, "Berhasil Insert!", "Success!", 2);
+                refreshTabel();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Error", 2);
+            }
+            resetAll();
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Bukan sedang dalam mode Insert!", "WARNING!", 2);
+        }
+    }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        if (mode.equals("edit")) {
+            getData();
+            try {
+                Menu.updateTableMenu(id, nama, harga, kategori, status);
+                JOptionPane.showMessageDialog(this, "Berhasil Update!", "Success!", 2);
+                refreshTabel();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Error", 2);
+            }
+            resetAll();
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Bukan sedang dalam mode Edit!", "WARNING!", 2);
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        if (mode.equals("edit")) {
+            getData();
+            try {
+                Menu.deleteTableMenu(id);
+                JOptionPane.showMessageDialog(this, "Berhasil Delete!", "Success!", 2);
+                refreshTabel();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Error", 2);
+            }
+            resetAll();
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Bukan sedang dalam mode Edit!", "WARNING!", 2);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        resetAll();
+    }//GEN-LAST:event_btnClearActionPerformed
 
     /**
      * @param args the command line arguments
@@ -157,8 +509,27 @@ public class MasterMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnInsert;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<String> cmbKategori;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblExit;
+    private javax.swing.JSpinner nudHarga;
+    private javax.swing.JRadioButton radAvailable;
+    private javax.swing.JRadioButton radNotAvailable;
+    private javax.swing.JTable tabelMenu;
+    private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtNama;
     // End of variables declaration//GEN-END:variables
 }

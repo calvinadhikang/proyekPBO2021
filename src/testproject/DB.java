@@ -24,44 +24,40 @@ public class DB {
                 System.out.println(ex.getMessage());
             }
     } 
-//    public static void insert(String sql, Object[] data){ 
-//        try {
-//            PreparedStatement stmt = conn.prepareStatement(sql);
-//             for (int i = 0; i < data.length; i++) {
-//                    stmt.setObject(i+1, data[i]);
-//             }
-//             stmt.execute(); 
-//            
-//        } catch (Exception exc) {
-//                JOptionPane.showMessageDialog(null, exc.getMessage());
-//        } 
-//    }
-//    
-//    public static void update(String sql, Object[] data){ 
-//        try {
-//            PreparedStatement s = conn.prepareStatement(sql);
-//             for (int i = 0; i < data.length; i++) {
-//                    s.setObject(i+1, data[i]);
-//             } 
-//             s.executeUpdate();  
-//        } catch (Exception exc) {
-//           JOptionPane.showMessageDialog(null, exc.getMessage());
-//        }
-//         
-//    }
-//    public static void delete(String sql, Object[] data){
-//        update(sql, data); 
-//    }
-    
+    public static void insert(String sql, Object[] data){ 
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+             for (int i = 0; i < data.length; i++) {
+                    stmt.setObject(i+1, data[i]);
+             }
+             stmt.execute(); 
+            
+        } catch (Exception exc) {
+                JOptionPane.showMessageDialog(null, exc.getMessage());
+        } 
+    }
+    public static void update(String sql, Object[] data){ 
+        try {
+            PreparedStatement s = conn.prepareStatement(sql);
+             for (int i = 0; i < data.length; i++) {
+                    s.setObject(i+1, data[i]);
+             } 
+             s.executeUpdate();  
+        } catch (Exception exc) {
+           JOptionPane.showMessageDialog(null, exc.getMessage());
+        }
+         
+    }
+    public static void delete(String sql, Object[] data){
+        update(sql, data); 
+    }
     public static void close(){
         try {
             conn.close();
         } catch (Exception exc) {
           JOptionPane.showMessageDialog(null, exc.getMessage()); 
         }
-    }
-    
-    
+    } 
     public static DefaultTableModel getTabelKaryawan(){
         //function buat query tabel karyawan di master karyawan
         DefaultTableModel tabelKaryawan = new DefaultTableModel();
@@ -72,7 +68,7 @@ public class DB {
         try { 
         PreparedStatement ps = conn.prepareStatement("SELECT k.id_karyawan as \"ID\",k.nama as \"Nama\" ,"
                 + "k.username as \"Username\",\n" +
-                "k.password as \"Password\", case k.status when k.status=1 then 'Aktif' "
+                "k.password as \"Password\", case when k.status=1 then 'Aktif' "
                 + "else 'Tidak aktif' end as \"Status\",\n" +
                 "case k.jabatan when k.jabatan=1 then 'Kasir' else "
                 +"'Manager' end as \"Jabatan\"\n" +
@@ -91,7 +87,7 @@ public class DB {
         return tabelKaryawan;
     }
     
-    public static DefaultTableModel getTabelMenu(){
+        public static DefaultTableModel getTabelMenu(){
         //function buat query tabel karyawan di master karyawan
         DefaultTableModel tabelMenu = new DefaultTableModel();
         String[] rows = {"ID","Nama",
@@ -117,6 +113,6 @@ public class DB {
         
         return tabelMenu;
     }
-    
+
 }   
 

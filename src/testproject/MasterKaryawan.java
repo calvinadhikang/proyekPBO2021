@@ -11,6 +11,7 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.TableColumnModel;
 
 /**
@@ -22,6 +23,10 @@ public class MasterKaryawan extends javax.swing.JFrame {
     /**
      * Creates new form MasterKaryawan
      */
+    String mode = "";
+    String username, password, nama;
+    int jabatan, status, id;
+    
     public MasterKaryawan() {
         initComponents();
         jPanel1.setFocusable(true);
@@ -29,6 +34,7 @@ public class MasterKaryawan extends javax.swing.JFrame {
         this.addMouseListener(frameDragListener);
         this.addMouseMotionListener(frameDragListener);
         settingTabel();
+        mode = "insert";
     }
     
     public void settingTabel(){
@@ -45,6 +51,42 @@ public class MasterKaryawan extends javax.swing.JFrame {
         columnModel.getColumn(3).setPreferredWidth(2);
         columnModel.getColumn(4).setPreferredWidth(4);
         columnModel.getColumn(5).setPreferredWidth(50);
+        tabelKaryawan.setDefaultEditor(Object.class, null);
+    }
+    
+    public void getData(){
+        username = txtUsername.getText();
+        password = txtPass.getText();
+        nama = txtNama.getText();
+        if (!(txtID.getText().equals(""))) {
+            id = Integer.parseInt(txtID.getText());
+        }
+        if (radKasir.isSelected()) {
+            jabatan = 1;
+        }
+        else{
+            jabatan = 2;
+        }
+        if (radAktif.isSelected()) {
+            status = 1;
+        }
+        else{
+            status = 0;
+        }
+    }
+    
+    public void resetAll(){
+        txtID.setText("");
+        txtNama.setText("");
+        txtPass.setText("");
+        txtUsername.setText("");
+        radAktif.setSelected(true);
+        radManager.setSelected(true);
+        mode = "insert";
+    }
+    
+    public void refreshTabel(){
+        tabelKaryawan.setModel(DB.getTabelKaryawan());
     }
     
     public static class FrameDragListener extends MouseAdapter {
@@ -100,9 +142,11 @@ public class MasterKaryawan extends javax.swing.JFrame {
         radKasir = new javax.swing.JRadioButton();
         radAktif = new javax.swing.JRadioButton();
         radTidakAktif = new javax.swing.JRadioButton();
-        btnMasterKaryawan = new javax.swing.JButton();
-        btnMasterKaryawan1 = new javax.swing.JButton();
-        btnMasterKaryawan2 = new javax.swing.JButton();
+        btnInsert = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -110,7 +154,7 @@ public class MasterKaryawan extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(26, 50, 90));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
-        lblExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/close.png"))); // NOI18N
+        lblExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/close v2.png"))); // NOI18N
         lblExit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblExitMouseClicked(evt);
@@ -119,7 +163,7 @@ public class MasterKaryawan extends javax.swing.JFrame {
 
         tabelKaryawan.setBackground(new java.awt.Color(204, 204, 204));
         tabelKaryawan.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 14)); // NOI18N
-        tabelKaryawan.setForeground(new java.awt.Color(255, 255, 255));
+        tabelKaryawan.setForeground(new java.awt.Color(0, 0, 0));
         tabelKaryawan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -133,7 +177,7 @@ public class MasterKaryawan extends javax.swing.JFrame {
         ));
         tabelKaryawan.setRowHeight(25);
         tabelKaryawan.setSelectionBackground(new java.awt.Color(0, 239, 173));
-        tabelKaryawan.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        tabelKaryawan.setSelectionForeground(new java.awt.Color(0, 0, 0));
         tabelKaryawan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tabelKaryawanMouseClicked(evt);
@@ -141,7 +185,7 @@ public class MasterKaryawan extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tabelKaryawan);
 
-        jLabel1.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Master Karyawan");
 
@@ -214,57 +258,69 @@ public class MasterKaryawan extends javax.swing.JFrame {
         radTidakAktif.setForeground(new java.awt.Color(255, 255, 255));
         radTidakAktif.setText("Tidak aktif");
 
-        btnMasterKaryawan.setBackground(new java.awt.Color(0, 239, 173));
-        btnMasterKaryawan.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
-        btnMasterKaryawan.setForeground(new java.awt.Color(255, 255, 255));
-        btnMasterKaryawan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/insert.png"))); // NOI18N
-        btnMasterKaryawan.setText("  Insert");
-        btnMasterKaryawan.addActionListener(new java.awt.event.ActionListener() {
+        btnInsert.setBackground(new java.awt.Color(0, 239, 173));
+        btnInsert.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        btnInsert.setForeground(new java.awt.Color(0, 0, 0));
+        btnInsert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/insert.png"))); // NOI18N
+        btnInsert.setText("  Insert");
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMasterKaryawanActionPerformed(evt);
+                btnInsertActionPerformed(evt);
             }
         });
 
-        btnMasterKaryawan1.setBackground(new java.awt.Color(0, 239, 173));
-        btnMasterKaryawan1.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
-        btnMasterKaryawan1.setForeground(new java.awt.Color(255, 255, 255));
-        btnMasterKaryawan1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/update.png"))); // NOI18N
-        btnMasterKaryawan1.setText("  Update");
-        btnMasterKaryawan1.addActionListener(new java.awt.event.ActionListener() {
+        btnUpdate.setBackground(new java.awt.Color(0, 239, 173));
+        btnUpdate.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(0, 0, 0));
+        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/update.png"))); // NOI18N
+        btnUpdate.setText("  Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMasterKaryawan1ActionPerformed(evt);
+                btnUpdateActionPerformed(evt);
             }
         });
 
-        btnMasterKaryawan2.setBackground(new java.awt.Color(255, 102, 102));
-        btnMasterKaryawan2.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
-        btnMasterKaryawan2.setForeground(new java.awt.Color(255, 255, 255));
-        btnMasterKaryawan2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/delete.png"))); // NOI18N
-        btnMasterKaryawan2.setText(" Delete");
-        btnMasterKaryawan2.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setBackground(new java.awt.Color(255, 102, 102));
+        btnDelete.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(0, 0, 0));
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/delete.png"))); // NOI18N
+        btnDelete.setText(" Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMasterKaryawan2ActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
+
+        btnClear.setBackground(new java.awt.Color(255, 255, 153));
+        btnClear.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(0, 0, 0));
+        btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/clear.png"))); // NOI18N
+        btnClear.setText("  Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 24)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testproject/images/logo mini.png"))); // NOI18N
+        jLabel8.setText(" Resto Ga Kenyang Ga Pulang");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblExit)))
-                        .addGap(18, 18, 18))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(536, 536, 536)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel4)
@@ -274,9 +330,10 @@ public class MasterKaryawan extends javax.swing.JFrame {
                                     .addComponent(txtID)
                                     .addComponent(txtPass)
                                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(85, 85, 85)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(79, 79, 79)
+                                        .addGap(18, 18, 18)
                                         .addComponent(jLabel3)
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -284,35 +341,47 @@ public class MasterKaryawan extends javax.swing.JFrame {
                                                 .addComponent(radManager)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(radKasir))
-                                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(61, 61, 61)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel6)
                                             .addComponent(jLabel7))
                                         .addGap(18, 18, 18)
                                         .addComponent(radAktif)
                                         .addGap(18, 18, 18)
-                                        .addComponent(radTidakAktif)))
-                                .addGap(43, 43, 43))
+                                        .addComponent(radTidakAktif)))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnMasterKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(379, 379, 379)
+                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnMasterKaryawan1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(80, 80, 80)
-                                .addComponent(btnMasterKaryawan2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(296, Short.MAX_VALUE))))
+                                .addComponent(lblExit)))
+                        .addGap(18, 18, 18))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(366, 366, 366)
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblExit)
-                    .addComponent(jLabel1))
-                .addGap(35, 35, 35)
+                    .addComponent(jLabel8))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
+                .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -340,10 +409,11 @@ public class MasterKaryawan extends javax.swing.JFrame {
                             .addComponent(jLabel5))))
                 .addGap(49, 49, 49)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnMasterKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMasterKaryawan1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMasterKaryawan2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(55, Short.MAX_VALUE))
+                    .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -367,23 +437,9 @@ public class MasterKaryawan extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_lblExitMouseClicked
 
-    private void btnMasterKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasterKaryawanActionPerformed
-        MasterKaryawan f = new MasterKaryawan();
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnMasterKaryawanActionPerformed
-
-    private void btnMasterKaryawan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasterKaryawan1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMasterKaryawan1ActionPerformed
-
-    private void btnMasterKaryawan2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasterKaryawan2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMasterKaryawan2ActionPerformed
-
     private void tabelKaryawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelKaryawanMouseClicked
         int idx = tabelKaryawan.getSelectedRow();
+        mode = "edit";
         if (idx >= 0 && idx < tabelKaryawan.getRowCount()) {
             txtID.setText(DB.getTabelKaryawan().getValueAt(idx, 0).toString());
             txtNama.setText(DB.getTabelKaryawan().getValueAt(idx, 1).toString());
@@ -409,6 +465,61 @@ public class MasterKaryawan extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_tabelKaryawanMouseClicked
+    
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        resetAll();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        if (mode.equals("insert")) {
+            getData();
+            try {
+                Karyawan.insertTableKaryawan(username, password, nama, status, jabatan);
+                JOptionPane.showMessageDialog(this, "Berhasil Insert!", "Success!", 2);
+                refreshTabel();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Error", 2);
+            }
+            resetAll();
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Bukan sedang dalam mode Insert!", "WARNING!", 2);
+        }
+    }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        if (mode.equals("edit")) {
+            getData();
+            try {
+                Karyawan.updateTableKaryawan(id, username, password, nama, status, jabatan);
+                JOptionPane.showMessageDialog(this, "Berhasil Update!", "Success!", 2);
+                refreshTabel();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Error", 2);
+            }
+            resetAll();
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Bukan sedang dalam mode Edit!", "WARNING!", 2);
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        if (mode.equals("edit")) {
+            getData();
+            try {
+                Karyawan.deleteTableKaryawan(id);
+                JOptionPane.showMessageDialog(this, "Berhasil Delete!", "Success!", 2);
+                refreshTabel();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Error", 2);
+            }
+            resetAll();
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Bukan sedang dalam mode Edit!", "WARNING!", 2);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -446,9 +557,10 @@ public class MasterKaryawan extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnMasterKaryawan;
-    private javax.swing.JButton btnMasterKaryawan1;
-    private javax.swing.JButton btnMasterKaryawan2;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnInsert;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JLabel jLabel1;
@@ -458,6 +570,7 @@ public class MasterKaryawan extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblExit;
