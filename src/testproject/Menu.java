@@ -3,7 +3,9 @@ package testproject;
 
 //PROJECT PBO GAIS
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import static testproject.DB.conn;
 
 public class Menu {
     static ArrayList<Menu> listMenu = new ArrayList<>();
@@ -61,4 +63,23 @@ public class Menu {
         this.harga = harga;
     }
     
+    public static void insertTableMenu(String namaMenu, String category, int harga, int status) throws Exception {
+        if(namaMenu.equals("") || category.equals("") || harga <= 0 || (!(status == 0 || status == 1)) ){
+            //exception
+            throw new Exception("Field tidak boleh kosong / harga > 0 !");
+        }
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement
+                    ("insert into menu values (nama, kategori, harga, status) values (?, ?, ?, ?)");
+            ps.setString(1, namaMenu);
+            ps.setString(2, category);
+            ps.setInt(3, harga);
+            ps.setInt(4, status);
+            
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
