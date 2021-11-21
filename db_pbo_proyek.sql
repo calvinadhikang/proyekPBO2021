@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2021 at 08:35 AM
+-- Generation Time: Nov 21, 2021 at 02:44 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -28,12 +28,20 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `dtrans` (
-  `nomorNota` int(10) NOT NULL,
+  `nomorNota` varchar(16) NOT NULL,
   `id_menu` int(10) NOT NULL,
   `qty` int(10) NOT NULL,
   `harga` int(10) NOT NULL,
   `subtotal` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `dtrans`
+--
+
+INSERT INTO `dtrans` (`nomorNota`, `id_menu`, `qty`, `harga`, `subtotal`) VALUES
+('NOTA211120210001', 5, 2, 5000, 10000),
+('NOTA211120210001', 4, 2, 20000, 40000);
 
 -- --------------------------------------------------------
 
@@ -42,7 +50,7 @@ CREATE TABLE `dtrans` (
 --
 
 CREATE TABLE `htrans` (
-  `nomorNota` int(10) NOT NULL,
+  `nomorNota` varchar(16) NOT NULL,
   `tanggalTrans` date NOT NULL,
   `jamTrans` time(6) NOT NULL,
   `metodePembayaran` varchar(50) NOT NULL,
@@ -50,6 +58,13 @@ CREATE TABLE `htrans` (
   `id_karyawan` int(10) NOT NULL,
   `status` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `htrans`
+--
+
+INSERT INTO `htrans` (`nomorNota`, `tanggalTrans`, `jamTrans`, `metodePembayaran`, `total`, `id_karyawan`, `status`) VALUES
+('NOTA211120210001', '2021-11-21', '16:36:27.000000', 'Tunai', 50000, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -66,6 +81,16 @@ CREATE TABLE `karyawan` (
   `jabatan` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `karyawan`
+--
+
+INSERT INTO `karyawan` (`id_karyawan`, `username`, `password`, `nama`, `status`, `jabatan`) VALUES
+(1, 'karyawan1', 'karyawan1', 'Michael', 1, 1),
+(2, 'karyawan2', 'karyawan2', 'Rico', 1, 1),
+(3, 'karyawan3', 'karyawan3', 'Jonathan', 0, 1),
+(4, 'manager1', 'manager1', 'Novan', 1, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -81,6 +106,24 @@ CREATE TABLE `menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Dumping data for table `menu`
+--
+
+INSERT INTO `menu` (`id_menu`, `nama`, `harga`, `kategori`, `status`) VALUES
+(1, 'Nasi Goreng', 10000, 'Makanan', 1),
+(2, 'Mie Goreng', 12000, 'Makanan', 1),
+(3, 'Mie Goreng Cabai Hijau', 12000, 'Makanan', 0),
+(4, 'Udang Goreng Tepung', 20000, 'Makanan', 1),
+(5, 'Es Teh Manis', 5000, 'Minuman', 1),
+(6, 'Ayam Goreng', 18000, 'Makanan', 1),
+(7, 'Teh Tawar', 4000, 'Minuman', 1),
+(8, 'Lumpia', 5000, 'Snack', 1),
+(9, 'Pastel', 5000, 'Snack', 1),
+(10, 'Pangsit', 6000, 'Snack', 1),
+(11, 'Es Jeruk', 4000, 'Minuman', 1),
+(12, 'Milkshake Strawberry', 9000, 'Minuman', 1);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -88,8 +131,8 @@ CREATE TABLE `menu` (
 -- Indexes for table `dtrans`
 --
 ALTER TABLE `dtrans`
-  ADD KEY `FK_HTRANS` (`nomorNota`),
-  ADD KEY `FK_MENU` (`id_menu`);
+  ADD KEY `FK_MENU` (`id_menu`),
+  ADD KEY `FK_HTRANS` (`nomorNota`);
 
 --
 -- Indexes for table `htrans`
@@ -116,22 +159,16 @@ ALTER TABLE `menu`
 --
 
 --
--- AUTO_INCREMENT for table `htrans`
---
-ALTER TABLE `htrans`
-  MODIFY `nomorNota` int(10) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `id_karyawan` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_karyawan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id_menu` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_menu` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
