@@ -4,7 +4,7 @@ package testproject;
 public class Karyawan {
     static String username;
     static int id;
-
+    
     public static String getUsername() {
         return username;
     }
